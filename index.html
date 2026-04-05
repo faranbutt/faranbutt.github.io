@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faran Taimoor Butt — AI Researcher</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Root tokens ──────────────────────────────────────────── */
+    :root {
+      --cream:   #f5f0e8;
+      --paper:   #faf7f2;
+      --ink:     #1a1612;
+      --muted:   #6b6259;
+      --accent:  #b5451b;
+      --accent2: #1b5ab5;
+      --rule:    #d4ccc0;
+      --card:    #ffffff;
+      --shadow:  rgba(26,22,18,0.10);
+      --ff-serif: 'Playfair Display', Georgia, serif;
+      --ff-sans:  'DM Sans', system-ui, sans-serif;
+      --ff-mono:  'JetBrains Mono', monospace;
+    }
+
+    /* ── Reset ───────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--ff-sans);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── Noise grain overlay ─────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 180px;
+      opacity: .55;
+    }
+
+    /* ── Scroll-reveal utility ───────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── Navigation ─────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 3.5rem;
+      background: rgba(250,247,242,.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--rule);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 2px 24px var(--shadow); }
+    .nav-brand {
+      font-family: var(--ff-serif);
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: .01em;
+    }
+    .nav-brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2.2rem; font-size: .82rem; font-weight: 400; letter-spacing: .06em; text-transform: uppercase; }
+    .nav-links a { color: var(--muted); transition: color .2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a.active { color: var(--accent); }
+
+    /* ── Hero ────────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 0 3.5rem;
+      padding-top: 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: center;
+      padding-right: 4rem;
+      padding-bottom: 4rem;
+    }
+    .hero-eyebrow {
+      font-family: var(--ff-mono);
+      font-size: .72rem;
+      color: var(--accent);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin-bottom: 1.4rem;
+      display: flex; align-items: center; gap: .7rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block; width: 2rem; height: 1px; background: var(--accent);
+    }
+    h1.hero-name {
+      font-family: var(--ff-serif);
+      font-size: clamp(3rem, 6vw, 5.2rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -.02em;
+      margin-bottom: .6rem;
+    }
+    h1.hero-name em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-tagline {
+      font-family: var(--ff-serif);
+      font-size: 1.08rem;
+      font-style: italic;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      line-height: 1.5;
+      max-width: 480px;
+    }
+    .hero-affil {
+      display: flex; flex-direction: column; gap: .5rem;
+      margin-bottom: 2.4rem;
+    }
+    .affil-item {
+      display: flex; align-items: center; gap: .8rem;
+      font-size: .88rem; color: var(--muted);
+    }
+    .affil-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0;
+    }
+    .affil-item strong { color: var(--ink); font-weight: 500; }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .72rem 1.6rem;
+      font-size: .82rem; font-weight: 500; letter-spacing: .04em;
+      border-radius: 3px;
+      transition: all .2s;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--ink); color: var(--paper);
+    }
+    .btn-primary:hover { background: var(--accent); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(181,69,27,.35); }
+    .btn-outline {
+      border: 1.5px solid var(--rule); color: var(--muted);
+    }
+    .btn-outline:hover { border-color: var(--ink); color: var(--ink); transform: translateY(-1px); }
+
+    /* Hero right — photo + floating cards */
+    .hero-right {
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .photo-frame {
+      position: relative; z-index: 2;
+      width: 280px; height: 340px;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 12px 18px 48px rgba(26,22,18,.22);
+      border: 5px solid var(--card);
+    }
+    .photo-frame img {
+      width: 100%; height: 100%; object-fit: cover; object-position: top;
+    }
+    .photo-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(145deg, #d4ccc0 0%, #b8afa3 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: .6rem;
+    }
+    .photo-placeholder svg { opacity: .45; }
+    .photo-placeholder p { font-size: .72rem; color: rgba(26,22,18,.5); font-family: var(--ff-mono); }
+    /* Decorative background element */
+    .hero-bg-block {
+      position: absolute;
+      right: -30px; top: 50%; transform: translateY(-50%);
+      width: 320px; height: 380px;
+      border: 1.5px solid var(--rule);
+      border-radius: 6px;
+      z-index: 1;
+    }
+    .hero-bg-block2 {
+      position: absolute;
+      right: 30px; top: 50%; transform: translateY(-50%);
+      width: 320px; height: 380px;
+      background: var(--cream);
+      border-radius: 6px;
+      z-index: 0;
+    }
+    /* Floating stat cards */
+    .stat-card {
+      position: absolute; z-index: 3;
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: .85rem 1.1rem;
+      box-shadow: 0 8px 32px var(--shadow);
+      font-size: .78rem;
+    }
+    .stat-card .num {
+      font-family: var(--ff-serif);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: .2rem;
+    }
+    .stat-card .lbl { color: var(--muted); }
+    .stat-card:nth-of-type(1) { top: 16%; left: -60px; }
+    .stat-card:nth-of-type(2) { bottom: 16%; right: -50px; }
+
+    /* Scroll hint */
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 3.5rem;
+      display: flex; align-items: center; gap: .7rem;
+      font-family: var(--ff-mono); font-size: .7rem;
+      color: var(--muted); letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .scroll-hint::after {
+      content: '';
+      display: block; width: 40px; height: 1px; background: var(--muted);
+      animation: pulse-line 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse-line {
+      0%, 100% { width: 40px; opacity: 1; }
+      50%       { width: 20px; opacity: .4; }
+    }
+
+    /* ── Section base ────────────────────────────────────────── */
+    section { position: relative; z-index: 1; }
+    .section-inner { max-width: 1080px; margin: 0 auto; padding: 6rem 3.5rem; }
+    .section-label {
+      display: flex; align-items: center; gap: 1rem;
+      font-family: var(--ff-mono); font-size: .7rem;
+      color: var(--accent); letter-spacing: .15em; text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+    h2.section-title {
+      font-family: var(--ff-serif);
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700; line-height: 1.15;
+      margin-bottom: 2.8rem;
+    }
+    h2.section-title em { font-style: italic; color: var(--accent); }
+
+    /* ── About ───────────────────────────────────────────────── */
+    #about { background: var(--cream); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+    .about-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 5rem; align-items: start; }
+    .about-bio p {
+      font-size: 1.02rem; line-height: 1.8; color: var(--ink);
+      margin-bottom: 1.2rem;
+    }
+    .about-bio p:last-child { margin-bottom: 0; }
+    .about-bio strong { font-weight: 500; }
+    .about-bio a { color: var(--accent); border-bottom: 1px solid rgba(181,69,27,.3); transition: border-color .2s; }
+    .about-bio a:hover { border-color: var(--accent); }
+    .about-sidebar {}
+    .sidebar-block { margin-bottom: 2.2rem; }
+    .sidebar-block h3 {
+      font-family: var(--ff-mono); font-size: .72rem;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: .8rem;
+      padding-bottom: .4rem; border-bottom: 1px solid var(--rule);
+    }
+    .sidebar-links { display: flex; flex-direction: column; gap: .5rem; }
+    .sidebar-link {
+      display: flex; align-items: center; gap: .7rem;
+      font-size: .88rem; color: var(--ink);
+      padding: .4rem 0;
+      border-bottom: 1px solid rgba(212,204,192,.5);
+      transition: gap .2s, color .2s;
+    }
+    .sidebar-link:hover { gap: 1rem; color: var(--accent); }
+    .sidebar-link-icon { font-size: 1rem; min-width: 1.2rem; }
+    .interest-chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .chip {
+      font-family: var(--ff-mono); font-size: .7rem;
+      padding: .3rem .75rem; border: 1px solid var(--rule);
+      border-radius: 2px; color: var(--muted);
+      letter-spacing: .05em;
+      transition: all .2s;
+    }
+    .chip:hover { border-color: var(--accent); color: var(--accent); background: rgba(181,69,27,.05); }
+
+    /* ── Research experience — timeline ─────────────────────── */
+    #research { background: var(--paper); }
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: ''; position: absolute;
+      left: 0; top: 8px; bottom: 0;
+      width: 1px; background: var(--rule);
+    }
+    .tl-item {
+      position: relative;
+      margin-bottom: 3rem;
+      padding-left: 1.8rem;
+    }
+    .tl-dot {
+      position: absolute; left: -2.4rem; top: .45rem;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 0 4px rgba(181,69,27,.1);
+    }
+    .tl-dot.current { background: var(--accent); }
+    .tl-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: .3rem; flex-wrap: wrap; gap: .4rem; }
+    .tl-role { font-weight: 500; font-size: 1rem; }
+    .tl-date {
+      font-family: var(--ff-mono); font-size: .72rem;
+      color: var(--muted); letter-spacing: .06em;
+      white-space: nowrap;
+    }
+    .tl-institution {
+      font-size: .88rem; color: var(--accent);
+      margin-bottom: .6rem; font-weight: 400;
+    }
+    .tl-advisor {
+      font-size: .82rem; color: var(--muted);
+      font-style: italic; margin-bottom: .6rem;
+    }
+    .tl-points { list-style: none; }
+    .tl-points li {
+      font-size: .9rem; color: var(--muted);
+      padding: .2rem 0;
+      display: flex; align-items: flex-start; gap: .6rem;
+    }
+    .tl-points li::before { content: '—'; color: var(--rule); flex-shrink: 0; margin-top: .05rem; }
+
+    /* ── Publications ────────────────────────────────────────── */
+    #publications { background: var(--cream); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+    .pub-card {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 1.8rem 2rem;
+      margin-bottom: 1.2rem;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 0 1.5rem;
+      align-items: start;
+      transition: box-shadow .25s, transform .25s;
+    }
+    .pub-card:hover { box-shadow: 0 8px 40px var(--shadow); transform: translateY(-2px); }
+    .pub-year {
+      font-family: var(--ff-mono); font-size: .7rem;
+      color: var(--muted); letter-spacing: .08em;
+      padding-top: .3rem; white-space: nowrap;
+    }
+    .pub-body {}
+    .pub-title {
+      font-family: var(--ff-serif); font-size: 1.05rem;
+      font-weight: 700; line-height: 1.4;
+      margin-bottom: .4rem;
+    }
+    .pub-authors { font-size: .85rem; color: var(--muted); margin-bottom: .3rem; }
+    .pub-authors strong { color: var(--ink); font-weight: 500; }
+    .pub-venue { font-size: .82rem; color: var(--muted); font-style: italic; }
+    .pub-badge {
+      font-family: var(--ff-mono); font-size: .65rem;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: .25rem .6rem;
+      background: rgba(27,90,181,.08);
+      color: var(--accent2);
+      border: 1px solid rgba(27,90,181,.2);
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+    .pub-links { display: flex; gap: .5rem; margin-top: .6rem; flex-wrap: wrap; }
+    .pub-link {
+      font-family: var(--ff-mono); font-size: .68rem;
+      letter-spacing: .06em; text-transform: uppercase;
+      padding: .2rem .55rem;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      color: var(--muted);
+      transition: all .2s;
+    }
+    .pub-link:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Projects ────────────────────────────────────────────── */
+    #projects { background: var(--paper); }
+    .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+    .proj-card {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 1.6rem;
+      display: flex; flex-direction: column;
+      transition: box-shadow .25s, transform .25s, border-color .25s;
+      cursor: default;
+    }
+    .proj-card:hover { box-shadow: 0 8px 40px var(--shadow); transform: translateY(-3px); border-color: var(--accent); }
+    .proj-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(181,69,27,.12), rgba(181,69,27,.04));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; margin-bottom: 1rem;
+      border: 1px solid rgba(181,69,27,.2);
+    }
+    .proj-title { font-family: var(--ff-serif); font-size: 1rem; font-weight: 700; margin-bottom: .5rem; }
+    .proj-desc { font-size: .85rem; color: var(--muted); line-height: 1.6; flex: 1; margin-bottom: 1rem; }
+    .proj-tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: 1rem; }
+    .proj-tag {
+      font-family: var(--ff-mono); font-size: .65rem;
+      padding: .2rem .5rem;
+      background: var(--cream);
+      border: 1px solid var(--rule);
+      border-radius: 2px; color: var(--muted);
+    }
+    .proj-link {
+      font-family: var(--ff-mono); font-size: .7rem;
+      color: var(--accent); letter-spacing: .05em;
+      display: flex; align-items: center; gap: .4rem;
+      transition: gap .2s;
+    }
+    .proj-link:hover { gap: .7rem; }
+
+    /* ── Awards ──────────────────────────────────────────────── */
+    #awards { background: var(--cream); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+    .awards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .award-row {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1rem 1.2rem;
+      background: var(--card); border: 1px solid var(--rule);
+      border-radius: 5px;
+      transition: box-shadow .2s;
+    }
+    .award-row:hover { box-shadow: 0 4px 18px var(--shadow); }
+    .award-year {
+      font-family: var(--ff-mono); font-size: .68rem;
+      color: var(--muted); letter-spacing: .06em;
+      white-space: nowrap; padding-top: .25rem;
+      min-width: 2.5rem;
+    }
+    .award-body {}
+    .award-title { font-size: .92rem; font-weight: 500; margin-bottom: .15rem; }
+    .award-sub { font-size: .8rem; color: var(--muted); }
+    .award-amount {
+      margin-left: auto; font-family: var(--ff-mono); font-size: .75rem;
+      color: var(--accent); white-space: nowrap;
+      padding-top: .25rem;
+    }
+
+    /* ── Fellowships ─────────────────────────────────────────── */
+    .fellow-list { display: flex; flex-direction: column; gap: .9rem; }
+    .fellow-item {
+      padding: 1.2rem 1.5rem;
+      background: var(--card); border: 1px solid var(--rule);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 5px 5px 0;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: .3rem 2rem;
+    }
+    .fellow-name { font-weight: 500; font-size: .92rem; }
+    .fellow-desc { font-size: .82rem; color: var(--muted); grid-column: 1; }
+    .fellow-amount {
+      font-family: var(--ff-mono); font-size: .82rem;
+      color: var(--accent); font-weight: 400;
+      grid-row: 1 / 3; align-self: center;
+    }
+
+    /* ── Skills ──────────────────────────────────────────────── */
+    #skills { background: var(--paper); }
+    .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .skill-group {
+      padding: 1.4rem 1.6rem;
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+    }
+    .skill-group h3 {
+      font-family: var(--ff-mono); font-size: .7rem;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: .8rem;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .skill-tag {
+      font-size: .78rem;
+      padding: .25rem .65rem;
+      background: var(--cream);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      color: var(--ink);
+    }
+
+    /* ── Contact ─────────────────────────────────────────────── */
+    #contact {
+      background: var(--ink); color: var(--paper);
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    #contact .section-label { color: #b5a89a; }
+    #contact .section-label::after { background: rgba(255,255,255,.12); }
+    #contact h2.section-title { color: var(--paper); }
+    #contact h2.section-title em { color: #e07b52; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .contact-note {
+      font-size: 1.02rem; line-height: 1.8;
+      color: rgba(245,240,232,.7);
+      margin-bottom: 2rem;
+    }
+    .contact-links { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+    .contact-link {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .85rem 1rem;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 5px;
+      font-size: .85rem; color: rgba(245,240,232,.85);
+      transition: all .2s;
+    }
+    .contact-link:hover {
+      background: rgba(255,255,255,.1);
+      border-color: rgba(255,255,255,.2);
+      color: var(--paper);
+      transform: translateX(3px);
+    }
+    .contact-link-icon { font-size: 1.1rem; min-width: 1.3rem; }
+    .contact-link-label { font-size: .7rem; font-family: var(--ff-mono); color: rgba(245,240,232,.4); display: block; }
+    .open-to {
+      padding: 1.8rem;
+      background: rgba(181,69,27,.12);
+      border: 1px solid rgba(181,69,27,.3);
+      border-radius: 6px;
+      margin-top: 2rem;
+    }
+    .open-to h3 {
+      font-family: var(--ff-serif);
+      font-size: 1rem; font-weight: 700;
+      color: #e07b52; margin-bottom: .6rem;
+    }
+    .open-to ul { list-style: none; }
+    .open-to ul li {
+      font-size: .88rem;
+      color: rgba(245,240,232,.75);
+      padding: .25rem 0;
+      display: flex; align-items: center; gap: .6rem;
+    }
+    .open-to ul li::before { content: '↳'; color: #e07b52; }
+
+    /* ── Footer ──────────────────────────────────────────────── */
+    footer {
+      background: #110f0d;
+      color: rgba(245,240,232,.35);
+      text-align: center;
+      padding: 1.5rem 2rem;
+      font-family: var(--ff-mono);
+      font-size: .68rem; letter-spacing: .08em;
+    }
+
+    /* ── Animations ──────────────────────────────────────────── */
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .hero-left > * {
+      opacity: 0; animation: fade-up .7s ease forwards;
+    }
+    .hero-left > *:nth-child(1) { animation-delay: .1s; }
+    .hero-left > *:nth-child(2) { animation-delay: .2s; }
+    .hero-left > *:nth-child(3) { animation-delay: .3s; }
+    .hero-left > *:nth-child(4) { animation-delay: .4s; }
+    .hero-left > *:nth-child(5) { animation-delay: .5s; }
+    .hero-left > *:nth-child(6) { animation-delay: .6s; }
+    .hero-right {
+      opacity: 0; animation: fade-up .9s ease .5s forwards;
+    }
+
+    /* Typewriter for hero subtitle */
+    .typewriter-wrap { min-height: 2.8em; }
+    #typewriter { border-right: 2px solid var(--accent); padding-right: 3px; }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      #hero { grid-template-columns: 1fr; padding: 6rem 1.5rem 3rem; }
+      .hero-left { padding-right: 0; text-align: center; align-items: center; }
+      .hero-right { display: none; }
+      .section-inner { padding: 4rem 1.5rem; }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .awards-grid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .contact-links { grid-template-columns: 1fr; }
+      .pub-card { grid-template-columns: 1fr; }
+      .pub-year { display: none; }
+      .scroll-hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ──────────────────────────────────────────── -->
+<nav id="nav">
+  <div class="nav-brand">Faran <span>T.</span> Butt</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#research">Research</a>
+    <a href="#publications">Publications</a>
+    <a href="#projects">Projects</a>
+    <a href="#awards">Awards</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">MS Researcher · AI Safety &amp; Alignment</div>
+    <h1 class="hero-name">Faran<br><em>Taimoor</em><br>Butt</h1>
+    <div class="hero-tagline typewriter-wrap">
+      <span id="typewriter"></span>
+    </div>
+    <div class="hero-affil">
+      <div class="affil-item">
+        <div class="affil-dot"></div>
+        <span><strong>MIPT Moscow</strong> · MS Applied Mathematics &amp; CS</span>
+      </div>
+      <div class="affil-item">
+        <div class="affil-dot" style="background:var(--accent2)"></div>
+        <span><strong>BASIRA Lab · Imperial College London</strong> · Research Mentee</span>
+      </div>
+      <div class="affil-item">
+        <div class="affil-dot" style="background:var(--muted)"></div>
+        <span>Islamabad, Pakistan · Open to PhD 2026</span>
+      </div>
+    </div>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="/faran_cv.pdf" target="_blank">
+        ↓ Download CV
+      </a>
+      <a class="btn btn-outline" href="mailto:faranbutt789@gmail.com">
+        Get in touch
+      </a>
+      <a class="btn btn-outline" href="https://scholar.google.com/citations?user=8df01rYAAAAJ&hl=en" target="_blank">
+        Google Scholar
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-bg-block2"></div>
+    <div class="hero-bg-block"></div>
+    <div class="photo-frame">
+      <!-- Replace src with your actual photo URL -->
+      <div class="photo-placeholder">
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="rgba(26,22,18,0.4)" stroke-width="1.2">
+          <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+        <p>photo.jpg</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="num">5+</div>
+      <div class="lbl">Hackathon<br>Awards</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">3</div>
+      <div class="lbl">Research<br>Labs</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">Scroll to explore</div>
+</section>
+
+<!-- ── About ─────────────────────────────────────────────────── -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-label reveal">01 — About</div>
+    <div class="about-grid">
+      <div class="about-bio reveal">
+        <h2 class="section-title">Building AI that is<br>safe and <em>trustworthy</em></h2>
+        <p>
+          I am an MS student in Applied Mathematics and Computer Science at the
+          <strong>Moscow Institute of Physics and Technology (MIPT)</strong>, where my thesis
+          explores <strong>GuadPEFT</strong> — parameter-efficient fine-tuning methods designed to
+          reduce bias amplification and alignment risks in large language models.
+        </p>
+        <p>
+          I am a Research Mentee at <a href="https://basira-lab.com/" target="_blank">BASIRA Lab, Imperial College London</a>
+          (I-X Initiative), working on graph neural networks and explainable AI under
+          Prof. Islem Rekik. My ongoing work, <strong>GraphFMD</strong>, is a graph-based
+          financial fraud detection benchmark targeting NeurIPS.
+        </p>
+        <p>
+          My broader goal is to contribute to the foundations of AI Safety and Alignment —
+          understanding when and why language models fail, and building systems that behave
+          reliably, honestly, and robustly in the real world. I am actively seeking
+          <strong>PhD opportunities for Fall 2026</strong>.
+        </p>
+      </div>
+      <div class="about-sidebar reveal">
+        <div class="sidebar-block">
+          <h3>Research Interests</h3>
+          <div class="interest-chips">
+            <span class="chip">AI Safety</span>
+            <span class="chip">LLM Alignment</span>
+            <span class="chip">Adversarial ML</span>
+            <span class="chip">Interpretability / XAI</span>
+            <span class="chip">Graph Neural Networks</span>
+            <span class="chip">Responsible NLP</span>
+            <span class="chip">PEFT Methods</span>
+            <span class="chip">Causal Reasoning</span>
+          </div>
+        </div>
+        <div class="sidebar-block">
+          <h3>Links</h3>
+          <div class="sidebar-links">
+            <a class="sidebar-link" href="https://scholar.google.com/citations?user=8df01rYAAAAJ&hl=en" target="_blank">
+              <span class="sidebar-link-icon">📄</span> Google Scholar
+            </a>
+            <a class="sidebar-link" href="https://github.com/faranbutt" target="_blank">
+              <span class="sidebar-link-icon">⌥</span> github.com/faranbutt
+            </a>
+            <a class="sidebar-link" href="https://www.linkedin.com/in/faranbutt" target="_blank">
+              <span class="sidebar-link-icon">↗</span> linkedin.com/in/faranbutt
+            </a>
+            <a class="sidebar-link" href="https://faranbutt.vercel.app" target="_blank">
+              <span class="sidebar-link-icon">🌐</span> faranbutt.vercel.app
+            </a>
+            <a class="sidebar-link" href="mailto:faranbutt789@gmail.com">
+              <span class="sidebar-link-icon">✉</span> faranbutt789@gmail.com
+            </a>
+          </div>
+        </div>
+        <div class="sidebar-block">
+          <h3>Education</h3>
+          <div style="display:flex;flex-direction:column;gap:.7rem;">
+            <div>
+              <div style="font-size:.88rem;font-weight:500;">MS · Applied Math &amp; CS</div>
+              <div style="font-size:.78rem;color:var(--muted);">MIPT Moscow · 2024–2026</div>
+            </div>
+            <div>
+              <div style="font-size:.88rem;font-weight:500;">BE · Electrical Engineering</div>
+              <div style="font-size:.78rem;color:var(--muted);">Air University · 2016–2020</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Research Experience ───────────────────────────────────── -->
+<section id="research">
+  <div class="section-inner">
+    <div class="section-label reveal">02 — Experience</div>
+    <h2 class="section-title reveal">Research <em>&amp; Work</em></h2>
+    <div class="timeline">
+
+      <div class="tl-item reveal">
+        <div class="tl-dot current"></div>
+        <div class="tl-header">
+          <div class="tl-role">Research Mentee</div>
+          <div class="tl-date">Oct 2025 — Present</div>
+        </div>
+        <div class="tl-institution">BASIRA Lab (I-X), Imperial College London · London, UK (Remote)</div>
+        <div class="tl-advisor">Advisor: Prof. Islem Rekik</div>
+        <ul class="tl-points">
+          <li>Selected for a competitive global mentorship in Graph Neural Networks and explainable AI.</li>
+          <li>Building <strong>GraphFMD</strong> — a graph-based financial fraud detection benchmark with automated evaluation and public leaderboard, targeting NeurIPS.</li>
+          <li>Advanced to Phase 2 of the programme; currently preparing a full research paper.</li>
+        </ul>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot current"></div>
+        <div class="tl-header">
+          <div class="tl-role">Web Developer</div>
+          <div class="tl-date">Aug 2025 — Ongoing</div>
+        </div>
+        <div class="tl-institution">Direct Assist Accountants · Islamabad, Pakistan</div>
+        <ul class="tl-points">
+          <li>Designing and maintaining the main company website; built the ASW Global consultancy platform end-to-end (frontend, backend, deployment).</li>
+          <li>Driving SEO optimisation, content strategy, and user experience improvements.</li>
+        </ul>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-header">
+          <div class="tl-role">Research Fellow</div>
+          <div class="tl-date">Jun 2025</div>
+        </div>
+        <div class="tl-institution">Novosibirsk State University · Novosibirsk, Russia</div>
+        <div class="tl-advisor">Advisor: Dr. Evgeniy Pavlovskiy</div>
+        <ul class="tl-points">
+          <li>Developed a 3D U-Net medical image segmentation pipeline on the BraTS dataset, achieving Dice = 75% (clinical viability threshold).</li>
+          <li>Deployed a real-time FastAPI visualisation platform for the segmentation results.</li>
+        </ul>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-header">
+          <div class="tl-role">iOS Developer</div>
+          <div class="tl-date">Apr 2025 — Aug 2025</div>
+        </div>
+        <div class="tl-institution">Sharix Visions · Islamabad, Pakistan</div>
+        <ul class="tl-points">
+          <li>Built a hardware diagnostics iOS app for used-device marketplaces using UIKit and CocoaPods.</li>
+        </ul>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-header">
+          <div class="tl-role">Full Stack Development Intern</div>
+          <div class="tl-date">Jul 2024 — Oct 2024</div>
+        </div>
+        <div class="tl-institution">IT Solera · Islamabad, Pakistan (Remote)</div>
+        <ul class="tl-points">
+          <li>Built 5+ AI-powered applications using Next.js, Firebase, OpenAI, LangChain, and Stripe API.</li>
+          <li>Led a team of 4+ fellows to 98% functional accuracy during beta testing; mentored by engineers from Amazon, Bloomberg, and Capital One.</li>
+        </ul>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-header">
+          <div class="tl-role">Research Intern</div>
+          <div class="tl-date">Sep 2022 — Oct 2023</div>
+        </div>
+        <div class="tl-institution">National Center of Artificial Intelligence (NCAI) · Islamabad, Pakistan</div>
+        <div class="tl-advisor">Advisor: Dr. Khawaja Fahad Iqbal</div>
+        <ul class="tl-points">
+          <li>Contributed to the Autonomous Wheelchair Project: SLAM, computer vision, and augmented reality for intelligent navigation.</li>
+          <li>Developed a novel SLAM algorithm fusing laser range finder and stereo vision — 30% improvement in mapping precision and speed.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Publications ──────────────────────────────────────────── -->
+<section id="publications">
+  <div class="section-inner">
+    <div class="section-label reveal">03 — Publications</div>
+    <h2 class="section-title reveal">Selected <em>Publications</em></h2>
+
+    <div class="pub-card reveal">
+      <div class="pub-year">2025</div>
+      <div class="pub-body">
+        <div class="pub-title">Global PIQA: Evaluating Physical Commonsense Reasoning Across 100+ Languages and Cultures</div>
+        <div class="pub-authors">
+          Tyler A. Chang, Catherine Arnett, Abdelrahman Eldesokey, Abdelrahman Sadallah, Abeer Kashar,
+          <strong>Faran Taimoor Butt</strong>, and 300+ international collaborators.
+        </div>
+        <div class="pub-venue">arXiv preprint arXiv:2510.24081 · Cornell University · 2025</div>
+        <div class="pub-links">
+          <a class="pub-link" href="https://doi.org/10.48550/arXiv.2510.24081" target="_blank">arXiv</a>
+          <a class="pub-link" href="https://doi.org/10.48550/arXiv.2510.24081" target="_blank">PDF</a>
+        </div>
+      </div>
+      <div class="pub-badge">arXiv</div>
+    </div>
+
+    <div class="pub-card reveal" style="opacity:.65;pointer-events:none;">
+      <div class="pub-year">2026</div>
+      <div class="pub-body">
+        <div class="pub-title">GraphFMD: A Graph-based Benchmark for Financial Fraud Detection</div>
+        <div class="pub-authors"><strong>Faran Taimoor Butt</strong> et al. — BASIRA Lab, Imperial College London</div>
+        <div class="pub-venue">In preparation · Targeting NeurIPS Benchmarks Track · 2026</div>
+      </div>
+      <div class="pub-badge" style="background:rgba(181,69,27,.08);color:var(--accent);border-color:rgba(181,69,27,.2);">In Prep</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Projects ───────────────────────────────────────────────── -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-label reveal">04 — Projects</div>
+    <h2 class="section-title reveal">Select <em>Projects</em></h2>
+    <div class="projects-grid">
+
+      <div class="proj-card reveal">
+        <div class="proj-icon">🔬</div>
+        <div class="proj-title">GraphFMD</div>
+        <div class="proj-desc">Graph-based financial fraud detection benchmark with automated evaluation pipeline and public leaderboard. Built at BASIRA Lab, targeting NeurIPS benchmarks track.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">GNNs</span>
+          <span class="proj-tag">Fraud Detection</span>
+          <span class="proj-tag">Benchmark</span>
+          <span class="proj-tag">PyTorch</span>
+        </div>
+        <a class="proj-link" href="https://github.com/faranbutt" target="_blank">View on GitHub →</a>
+      </div>
+
+      <div class="proj-card reveal">
+        <div class="proj-icon">🧠</div>
+        <div class="proj-title">GuadPEFT</div>
+        <div class="proj-desc">MS thesis exploring socially responsible parameter-efficient fine-tuning (PEFT) of LLMs. Addresses bias amplification and alignment risks during adapter-based adaptation.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">PEFT</span>
+          <span class="proj-tag">LLM Alignment</span>
+          <span class="proj-tag">Hugging Face</span>
+          <span class="proj-tag">Bias</span>
+        </div>
+        <span class="proj-link" style="opacity:.5;cursor:default;">MIPT Thesis · 2026</span>
+      </div>
+
+      <div class="proj-card reveal">
+        <div class="proj-icon">🏥</div>
+        <div class="proj-title">3D U-Net BraTS Segmentation</div>
+        <div class="proj-desc">End-to-end 3D U-Net medical image segmentation pipeline on the BraTS brain tumour dataset. Dice = 75%, deployed with a real-time FastAPI visualisation interface.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">3D U-Net</span>
+          <span class="proj-tag">Medical Imaging</span>
+          <span class="proj-tag">FastAPI</span>
+          <span class="proj-tag">PyTorch</span>
+        </div>
+        <a class="proj-link" href="https://github.com/faranbutt" target="_blank">View on GitHub →</a>
+      </div>
+
+      <div class="proj-card reveal">
+        <div class="proj-icon">♿</div>
+        <div class="proj-title">Autonomous Wheelchair</div>
+        <div class="proj-desc">Intelligent wheelchair integrating SLAM navigation, stereo vision, and AR-assisted user interface. Custom sensor-fusion SLAM achieved a 30% improvement in mapping precision and speed.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">SLAM</span>
+          <span class="proj-tag">Computer Vision</span>
+          <span class="proj-tag">Augmented Reality</span>
+          <span class="proj-tag">ROS</span>
+        </div>
+        <span class="proj-link" style="opacity:.5;cursor:default;">NCAI · 2022–2023</span>
+      </div>
+
+      <div class="proj-card reveal">
+        <div class="proj-icon">🤖</div>
+        <div class="proj-title">AI Agents</div>
+        <div class="proj-desc">Exploration of LangChain and LangGraph agent architectures — multi-agent coordination, tool use, and memory-augmented reasoning loops for complex task automation.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">LangChain</span>
+          <span class="proj-tag">LangGraph</span>
+          <span class="proj-tag">Agents</span>
+          <span class="proj-tag">OpenAI</span>
+        </div>
+        <a class="proj-link" href="https://github.com/faranbutt/AI-Agents" target="_blank">github.com/faranbutt/AI-Agents →</a>
+      </div>
+
+      <div class="proj-card reveal">
+        <div class="proj-icon">🪜</div>
+        <div class="proj-title">Stair-Climbing Robot</div>
+        <div class="proj-desc">BE undergraduate thesis project — a stair-climbing robot with a self-balancing platform. Combined embedded systems, control theory, and mechanical engineering design.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">Embedded C</span>
+          <span class="proj-tag">PID Control</span>
+          <span class="proj-tag">Robotics</span>
+          <span class="proj-tag">Arduino</span>
+        </div>
+        <span class="proj-link" style="opacity:.5;cursor:default;">Air University · 2020</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Awards ─────────────────────────────────────────────────── -->
+<section id="awards">
+  <div class="section-inner">
+    <div class="section-label reveal">05 — Recognition</div>
+    <h2 class="section-title reveal">Awards &amp; <em>Fellowships</em></h2>
+
+    <div style="margin-bottom:2.5rem;">
+      <div style="font-family:var(--ff-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;">Fellowships &amp; Scholarships</div>
+      <div class="fellow-list">
+        <div class="fellow-item reveal">
+          <div class="fellow-name">GNNs for Rising Stars Research Training Program</div>
+          <div class="fellow-amount">—</div>
+          <div class="fellow-desc">BASIRA Lab, Imperial College London · Selected globally for 8-week mentorship in GNNs & AI-driven biomedical applications · 2026 (Expected)</div>
+        </div>
+        <div class="fellow-item reveal">
+          <div class="fellow-name">InteRussia Fellowship</div>
+          <div class="fellow-amount">$1,300</div>
+          <div class="fellow-desc">Selected among 17 global participants · 2025</div>
+        </div>
+        <div class="fellow-item reveal">
+          <div class="fellow-name">Open Doors Olympiad Scholarship</div>
+          <div class="fellow-amount">$20,000</div>
+          <div class="fellow-desc">Full funding for MS in Russia · Competitive national olympiad · 2024</div>
+        </div>
+        <div class="fellow-item reveal">
+          <div class="fellow-name">Kamyab Jawan AI Scholarship</div>
+          <div class="fellow-amount">$300</div>
+          <div class="fellow-desc">Government-funded AI Diploma at NUST Islamabad · 2022</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-family:var(--ff-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;">Hackathons &amp; Competitions</div>
+      <div class="awards-grid">
+        <div class="award-row reveal">
+          <div class="award-year">2023</div>
+          <div class="award-body">
+            <div class="award-title">Seamless M4T Hackathon</div>
+            <div class="award-sub">2nd Place · 265 participants</div>
+          </div>
+          <div class="award-amount">$1,000</div>
+        </div>
+        <div class="award-row reveal">
+          <div class="award-year">2023</div>
+          <div class="award-body">
+            <div class="award-title">StableCode Hackathon</div>
+            <div class="award-sub">3rd Place · 546 participants</div>
+          </div>
+          <div class="award-amount">$1,500</div>
+        </div>
+        <div class="award-row reveal">
+          <div class="award-year">2023</div>
+          <div class="award-body">
+            <div class="award-title">Meta AudioCraft Hackathon</div>
+            <div class="award-sub">3rd Place · 293 participants</div>
+          </div>
+          <div class="award-amount">$500</div>
+        </div>
+        <div class="award-row reveal">
+          <div class="award-year">2023</div>
+          <div class="award-body">
+            <div class="award-title">Llama 2 Hackathon with Clarifai</div>
+            <div class="award-sub">5th Finalist · 1,765 participants</div>
+          </div>
+          <div class="award-amount">$300</div>
+        </div>
+        <div class="award-row reveal">
+          <div class="award-year">2023</div>
+          <div class="award-body">
+            <div class="award-title">Autonomous Agents Hackathon</div>
+            <div class="award-sub">Top 25 · 2,381 participants</div>
+          </div>
+          <div class="award-amount">—</div>
+        </div>
+        <div class="award-row reveal">
+          <div class="award-year">2023</div>
+          <div class="award-body">
+            <div class="award-title">Meta Hacker Cup</div>
+            <div class="award-sub">Round 2 Qualifier</div>
+          </div>
+          <div class="award-amount">—</div>
+        </div>
+        <div class="award-row reveal">
+          <div class="award-year">2024</div>
+          <div class="award-body">
+            <div class="award-title">NASA Space Apps Challenge</div>
+            <div class="award-sub">Participant</div>
+          </div>
+          <div class="award-amount">—</div>
+        </div>
+        <div class="award-row reveal">
+          <div class="award-year">2022</div>
+          <div class="award-body">
+            <div class="award-title">IEEE ICAI Conference</div>
+            <div class="award-sub">Represented Intelligent Robotics Lab</div>
+          </div>
+          <div class="award-amount">—</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Skills ─────────────────────────────────────────────────── -->
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-label reveal">06 — Technical</div>
+    <h2 class="section-title reveal">Skills &amp; <em>Tools</em></h2>
+    <div class="skills-grid">
+      <div class="skill-group reveal">
+        <h3>Machine Learning &amp; AI</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">PyTorch</span><span class="skill-tag">TensorFlow</span>
+          <span class="skill-tag">Hugging Face</span><span class="skill-tag">Scikit-Learn</span>
+          <span class="skill-tag">Keras</span><span class="skill-tag">Optuna</span>
+          <span class="skill-tag">MLFlow</span><span class="skill-tag">LangChain</span>
+          <span class="skill-tag">LangGraph</span><span class="skill-tag">OpenAI API</span>
+          <span class="skill-tag">Spark</span><span class="skill-tag">NLTK</span>
+        </div>
+      </div>
+      <div class="skill-group reveal">
+        <h3>Interpretability &amp; XAI</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">SHAP</span><span class="skill-tag">LIME</span>
+          <span class="skill-tag">TensorBoard</span><span class="skill-tag">InterpretML</span>
+          <span class="skill-tag">Captum</span><span class="skill-tag">Grad-CAM</span>
+        </div>
+      </div>
+      <div class="skill-group reveal">
+        <h3>Programming Languages</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span><span class="skill-tag">C/C++</span>
+          <span class="skill-tag">JavaScript</span><span class="skill-tag">Java</span>
+          <span class="skill-tag">Swift</span><span class="skill-tag">CUDA</span>
+          <span class="skill-tag">OpenMP</span><span class="skill-tag">LaTeX</span>
+        </div>
+      </div>
+      <div class="skill-group reveal">
+        <h3>Web &amp; Deployment</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">FastAPI</span><span class="skill-tag">Next.js</span>
+          <span class="skill-tag">React</span><span class="skill-tag">Node.js</span>
+          <span class="skill-tag">Docker</span><span class="skill-tag">Kubernetes</span>
+          <span class="skill-tag">AWS</span><span class="skill-tag">Azure</span>
+          <span class="skill-tag">GitHub Actions</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact ────────────────────────────────────────────────── -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-label reveal">07 — Contact</div>
+    <div class="contact-grid">
+      <div class="reveal">
+        <h2 class="section-title">Let's <em>connect</em></h2>
+        <p class="contact-note">
+          I am always happy to talk about AI safety research, potential collaborations,
+          PhD opportunities, or just exchange ideas. Feel free to reach out.
+        </p>
+        <div class="contact-links">
+          <a class="contact-link" href="mailto:faranbutt789@gmail.com">
+            <span class="contact-link-icon">✉</span>
+            <div>
+              <span class="contact-link-label">Email</span>
+              faranbutt789@gmail.com
+            </div>
+          </a>
+          <a class="contact-link" href="https://www.linkedin.com/in/faranbutt" target="_blank">
+            <span class="contact-link-icon">↗</span>
+            <div>
+              <span class="contact-link-label">LinkedIn</span>
+              in/faranbutt
+            </div>
+          </a>
+          <a class="contact-link" href="https://github.com/faranbutt" target="_blank">
+            <span class="contact-link-icon">⌥</span>
+            <div>
+              <span class="contact-link-label">GitHub</span>
+              github.com/faranbutt
+            </div>
+          </a>
+          <a class="contact-link" href="https://scholar.google.com/citations?user=8df01rYAAAAJ&hl=en" target="_blank">
+            <span class="contact-link-icon">📄</span>
+            <div>
+              <span class="contact-link-label">Google Scholar</span>
+              Faran Taimoor Butt
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="open-to">
+          <h3>Currently Open To</h3>
+          <ul>
+            <li>PhD programmes in AI Safety, Alignment &amp; Interpretability (Fall 2026)</li>
+            <li>Research collaborations on LLM robustness and responsible AI</li>
+            <li>Visiting researcher / internship positions at AI labs</li>
+            <li>Reviewing papers in NLP, AI safety, and graph ML</li>
+          </ul>
+        </div>
+        <div style="margin-top:1.5rem;padding:1.2rem 1.5rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:6px;">
+          <div style="font-family:var(--ff-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,240,232,.35);margin-bottom:.6rem;">Institutional Email</div>
+          <div style="font-size:.88rem;color:rgba(245,240,232,.7);">faranbutt@phystech.edu</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ─────────────────────────────────────────────────── -->
+<footer>
+  © 2025 Faran Taimoor Butt · Built with care · Islamabad, Pakistan
+</footer>
+
+<!-- ── JavaScript ─────────────────────────────────────────────── -->
+<script>
+  /* Nav scroll effect */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  /* Active nav link highlighting */
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const active = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+  sections.forEach(s => observer.observe(s));
+
+  /* Scroll-reveal */
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => revealObs.observe(el));
+
+  /* Typewriter effect */
+  const phrases = [
+    'Researching AI Safety & Alignment.',
+    'Building trustworthy language models.',
+    'Graph Neural Networks + Explainable AI.',
+    'MS @ MIPT · Research Mentee @ ICL.',
+    'Seeking PhD opportunities — Fall 2026.',
+  ];
+  let pi = 0, ci = 0, deleting = false;
+  const tw = document.getElementById('typewriter');
+  function type() {
+    const phrase = phrases[pi];
+    if (!deleting) {
+      tw.textContent = phrase.slice(0, ++ci);
+      if (ci === phrase.length) { deleting = true; setTimeout(type, 2200); return; }
+      setTimeout(type, 42);
+    } else {
+      tw.textContent = phrase.slice(0, --ci);
+      if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; setTimeout(type, 400); return; }
+      setTimeout(type, 22);
+    }
+  }
+  type();
+</script>
+</body>
+</html>
